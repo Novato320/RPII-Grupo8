@@ -9,8 +9,7 @@ public class TesteSeleniumJunit {
     @Test
     public void testandoSelenium(){
         WebDriver driver = new ChromeDriver();
-        driver.get("https://www.google.com/");
-
+        driver.get("https://testes.codefolio.com.br/");
 
     }
 }
