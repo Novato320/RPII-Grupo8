@@ -11,5 +11,12 @@ public class TesteSeleniumJunit {
         WebDriver driver = new ChromeDriver();
         driver.get("https://testes.codefolio.com.br/");
 
+        try{
+            Thread.sleep(5000);
+        }catch(InterruptedException e){
+            Thread.currentThread().interrupt();
+        }
+
+        driver.quit();
     }
 }
