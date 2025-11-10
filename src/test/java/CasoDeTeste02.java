@@ -14,10 +14,10 @@ import org.openqa.selenium.WebElement;
 import java.time.Duration;
 
 /**
- * CT-02 Cadastro de Curso
- * @author Guilherme Jaques
- * RF-02 O sistema deve permitir que o usuário adicione novos cursos,
+ * @Name: CT-02 Cadastro de Curso.
+ * @Requirement: RF-02 O sistema deve permitir que o usuário adicione novos cursos,
  * informando título, descrição e PIN (opcional).
+ * @author Guilherme Jaques
  */
 public class CasoDeTeste02 {
     public String nomeCurso = "Curso-Teste G.8";
@@ -97,8 +97,10 @@ public class CasoDeTeste02 {
 
     @Before
     public void setUp() throws Exception{
-        options = new ChromeOptions();
+        options = new ChromeOptions(); // parametro para o driver
         //options.addArguments("--headless"); // executa sem interface
+        //options.addArguments("--disable-gpu");// recomendado no Windows
+        //options.addArguments("--window-size=1920,1080"); // define tamanho da tela virtual
 
         driver = new ChromeDriver(options);
         driver.manage().window().maximize(); // tela cheia
