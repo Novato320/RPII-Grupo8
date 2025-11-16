@@ -1,0 +1,43 @@
+package utilitarios;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.JavascriptExecutor;
+
+import java.time.Duration;
+
+public class LoginFirebase {
+    // Dados para login FIREBASE
+    private final String FIREBASE_KEY = ConfigHelper.get("key.guilherme");
+    private final String FIREBASE_VALUE = ConfigHelper.get("value.guilherme");
+    private String linkSite = ConfigHelper.get("site");
+
+    private WebDriver driver;
+    private JavascriptExecutor js;
+
+    public LoginFirebase(WebDriver driver) {
+        this.driver = driver;
+        driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(50));
+        js = (JavascriptExecutor) driver; // inicializa JS Executor
+    }
+
+    // logica do login
+    public void login(){
+        driver.get(linkSite);
+
+        //injeção de dados
+        System.out.println("Injetando dados de autenticação no Local Storage...");
+        try{
+            js.executeScript("window.localStorage.setItem(arguments[0], arguments[1]);",
+                    FIREBASE_KEY,
+                    FIREBASE_VALUE);
+            System.out.println("Injeção bem sucedida!");
+        } catch (Exception e) {
+            System.out.println("Falha critica ao injetar no local storage:" + e.getMessage());
+            driver.quit();
+            throw  new RuntimeException("Falha no setup do local storage", e);
+        }
+
+        System.out.println("Recarregando pagina...");
+        driver.navigate().refresh();
+    }
+}
