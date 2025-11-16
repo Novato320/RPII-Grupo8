@@ -24,10 +24,20 @@ public class CasoDeTeste09 {
 
     private WebDriver driver;
     private ChromeOptions options;
+    private LoginFirebase loginFirebase;
+
+    public void esperarSegundos(int segundos){
+        try {
+            Thread.sleep(Duration.ofSeconds(segundos).toMillis());
+        }catch (InterruptedException e){
+            System.out.println("Erro au pausar a Thread");
+            Thread.currentThread().interrupt();
+        }
+    }
 
     @Before
     public void setUp() {
-        options = new ChromeOptions();
+        options = new ChromeOptions(); // parametro para o driver
         //options.addArguments("--headless"); // executa sem interface
         //options.addArguments("--disable-gpu");// recomendado no Windows
         //options.addArguments("--window-size=1920,1080"); // define tamanho da tela virtual
@@ -37,11 +47,15 @@ public class CasoDeTeste09 {
 
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20)); // tempo para carregar a pagina
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10)); // tempo para procurar um elemento
+
+        loginFirebase = new LoginFirebase(driver);
     }
 
     @Test
     public void testEditarSlide(){
+        loginFirebase.login();
 
+        //esperarSegundos(5);
     }
 
     @Test
