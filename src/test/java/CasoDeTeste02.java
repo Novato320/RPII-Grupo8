@@ -8,15 +8,13 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.WebElement;
 
 import java.time.Duration;
 
 /**
  * @Name: CT-02 Cadastro de Curso.
- * @Requirement: RF-02 O sistema deve permitir que o usuário adicione novos cursos,
- * informando título, descrição e PIN (opcional).
+ * @Requirement: RF-02 O sistema deve permitir que o usuário adicione novos cursos, informando título, descrição e PIN (opcional).
  * @author Guilherme Jaques
  */
 public class CasoDeTeste02 {
@@ -26,7 +24,6 @@ public class CasoDeTeste02 {
 
     WebDriver driver;
     ChromeOptions options;
-    WebDriverWait wait;
     JavascriptExecutor js;
 
     // Dados para login FIREBASE
@@ -64,7 +61,6 @@ public class CasoDeTeste02 {
     // logica para o login firebase
     public void login(){
         driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(50));
-        wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         js = (JavascriptExecutor) driver; // inicializa JS Executor
 
         driver.get("https://testes.codefolio.com.br/");
@@ -110,7 +106,7 @@ public class CasoDeTeste02 {
     }
 
     @Test
-    public void cadastroSemPin(){
+    public void testCadastroSemPin(){
         login();
 
         WebElement botaoPerfil = driver.findElement(By.xpath("/html/body/div/section[2]/div[2]/div/div[1]/div/div[2]/button[2]"));
@@ -140,7 +136,7 @@ public class CasoDeTeste02 {
     }
 
     @Test
-    public void cadastroComPin(){
+    public void testCadastroComPin(){
         login();
 
         WebElement botaoPerfil = driver.findElement(By.xpath("/html/body/div/section[2]/div[2]/div/div[1]/div/div[2]/button[2]"));
