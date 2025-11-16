@@ -1,8 +1,10 @@
+package utilitarios;
+
 import org.junit.Test;
+import static org.junit.Assert.*;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-
-import static org.junit.Assert.*;
 
 public class TesteSeleniumJunit {
 
@@ -19,4 +21,17 @@ public class TesteSeleniumJunit {
 
         driver.quit();
     }
+
+    @Test
+    public void testConfigHelper() {
+        String url = ConfigHelper.get("base.url");
+        String browser = ConfigHelper.get("browser");
+
+        System.out.println("Executando testes no navegador: " + browser);
+        System.out.println("URL base: " + url);
+
+        assertNotNull(url);
+        assertEquals("chrome", browser);
+    }
+
 }
