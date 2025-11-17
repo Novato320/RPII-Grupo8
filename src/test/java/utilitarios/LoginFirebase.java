@@ -13,12 +13,12 @@ public class LoginFirebase {
     private WebDriver driver;
     private JavascriptExecutor js;
 
-    public LoginFirebase(WebDriver driver, String key, String value) {
+    public LoginFirebase(WebDriver driver) {
         this.driver = driver;
         driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(50));
         js = (JavascriptExecutor) driver; // inicializa JS Executor
-        FIREBASE_KEY = ConfigHelper.get(key); // key.guilherme
-        FIREBASE_VALUE = ConfigHelper.get(value); // value.guilherme
+        FIREBASE_KEY = ConfigHelper.get("key"); // key.guilherme
+        FIREBASE_VALUE = ConfigHelper.get("value"); // value.guilherme
     }
 
     // logica do login

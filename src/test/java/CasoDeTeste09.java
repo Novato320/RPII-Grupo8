@@ -25,7 +25,7 @@ public class CasoDeTeste09 {
     private String linkSite = ConfigHelper.get("site");
 
     private String tituloSlide = "Slide-Teste G.8";
-    private String slide = ConfigHelper.get("slide.guilherme");
+    private String slide = ConfigHelper.get("slide1");
     private String descricaoSlide = "Esse slide foi criado para testes.";
 
     private WebDriver driver;
@@ -58,7 +58,7 @@ public class CasoDeTeste09 {
 
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-        loginFirebase = new LoginFirebase(driver, "key.guilherme", "value.guilherme");
+        loginFirebase = new LoginFirebase(driver);
     }
 
     @Test
@@ -115,7 +115,7 @@ public class CasoDeTeste09 {
         WebElement botaoSlides = driver.findElement(By.xpath("/html/body/div/div[2]/div[1]/div[3]/div/div/div/button[2]"));
         botaoSlides.click();
 
-        esperarSegundos(5);
+        esperarSegundos(50);
     }
 
     @After
