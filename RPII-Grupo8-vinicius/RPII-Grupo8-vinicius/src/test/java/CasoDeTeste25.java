@@ -146,19 +146,57 @@ public class CasoDeTeste25 {
 
     // ===================== HELPERS REUTILIZADOS (Da sua biblioteca) =====================
 
-    // Estes métodos (abrirMenuPerfilEIrParaGerenciamento, clicarGerenciarCurso, clicarAba)
-    // devem ser copiados da sua classe CasoDeTeste06/13, garantindo que o Java reconheça os métodos.
-    // (Abaixo está um placeholder, use sua versão mais recente e estável)
 
-    private void abrirMenuPerfilEIrParaGerenciamento() {
-        // ... (código de abertura do menu de perfil) ...
+
+   private void abrirMenuPerfilEIrParaGerenciamento() throws InterruptedException {
+        // Localizador do botão de perfil
+        By profileBtnLocator = By.cssSelector("button[aria-label='Configurações da Conta']");
+
+        // 1. Espera que o ícone de perfil esteja CLICÁVEL (Prova que o login foi validado)
+        WebElement profileBtn = this.wait.until(ExpectedConditions.elementToBeClickable(profileBtnLocator));
+
+        // CLICA no perfil para abrir o menu
+        this.js.executeScript("arguments[0].click();", profileBtn);
+
+        // 🚨 CORREÇÃO CRÍTICA: Pausa Forçada para a Renderização do Menu (Evita Timeout)
+        Thread.sleep(3000); // Pausa de 3 segundos
+
+        // 2. Clicar em "Gerenciamento de Cursos"
+        // (Não precisamos esperar o container, pois a pausa forçada resolve o tempo de renderização)
+        By gerenCursosLocator = By.xpath("//li[normalize-space()='Gerenciamento de Cursos']");
+        WebElement item = this.wait.until(ExpectedConditions.elementToBeClickable(gerenCursosLocator));
+
+        // Clica usando JavaScript para garantir a ação (evitar bloqueio do menu)
+        this.js.executeScript("arguments[0].click();", item);
+
+        this.wait.until(ExpectedConditions.urlContains("/manage-courses"));
+
+        System.out.println("Navegação para gerenciamento de cursos bem-sucedida.");
+    }
+
+      private void clicarGerenciarCurso(String nomeParcialCurso) {
+        By btnLocator = By.xpath("//h6[contains(normalize-space(),'" + nomeParcialCurso + "')]/following::button[contains(.,'Gerenciar Curso')][1]");
+
+        WebElement btn = this.wait.until(ExpectedConditions.elementToBeClickable(btnLocator));
+        this.js.executeScript("arguments[0].scrollIntoView({block: 'center'});", btn);
+        this.js.executeScript("arguments[0].click();", btn);
+
+        this.wait.until(ExpectedConditions.urlContains("/adm-cursos"));
+        this.wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//h2[contains(text(),'Gerenciar Curso')] | //h1[contains(text(),'Gerenciar Curso')]")
+        ));
     }
 
     private void clicarGerenciarCurso(String nomeParcialCurso) {
-        // ... (código para clicar em Gerenciar Curso) ...
-    }
+        By btnLocator = By.xpath("//h6[contains(normalize-space(),'" + nomeParcialCurso + "')]/following::button[contains(.,'Gerenciar Curso')][1]");
 
-    private void clicarAba(String nomeAba) {
-        // ... (código para clicar na aba usando translate()) ...
+        WebElement btn = this.wait.until(ExpectedConditions.elementToBeClickable(btnLocator));
+        this.js.executeScript("arguments[0].scrollIntoView({block: 'center'});", btn);
+        this.js.executeScript("arguments[0].click();", btn);
+
+        this.wait.until(ExpectedConditions.urlContains("/adm-cursos"));
+        this.wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//h2[contains(text(),'Gerenciar Curso')] | //h1[contains(text(),'Gerenciar Curso')]")
+        ));
     }
 }
