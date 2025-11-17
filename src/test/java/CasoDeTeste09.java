@@ -1,3 +1,4 @@
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import utilitarios.LoginFirebase;
 import utilitarios.ConfigHelper;
 
@@ -9,6 +10,7 @@ import static org.junit.Assert.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
@@ -21,10 +23,15 @@ import java.time.Duration;
  */
 public class CasoDeTeste09 {
     private String linkSite = ConfigHelper.get("site");
+
+    private String tituloSlide = "Slide-Teste G.8";
     private String slide = ConfigHelper.get("slide.guilherme");
+    private String descricaoSlide = "Esse slide foi criado para testes.";
 
     private WebDriver driver;
     private ChromeOptions options;
+    private WebDriverWait wait;
+
     private LoginFirebase loginFirebase;
 
     public void esperarSegundos(int segundos){
@@ -49,14 +56,44 @@ public class CasoDeTeste09 {
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20)); // tempo para carregar a pagina
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10)); // tempo para procurar um elemento
 
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
         loginFirebase = new LoginFirebase(driver, "key.guilherme", "value.guilherme");
     }
 
     @Test
     public void testEditarSlide(){
         driver.get(linkSite);
-
         loginFirebase.login();
+
+        WebElement botaoPerfil = driver.findElement(By.xpath("/html/body/div/section[2]/div[2]/div/div[1]/div/div[2]/button[2]"));
+        botaoPerfil.click();
+
+        WebElement botaoGerenCursos = driver.findElement(By.xpath("/html/body/div[2]/div[3]/ul/li[2]"));
+        botaoGerenCursos.click();
+
+        WebElement botaoGenrenCurso = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div/div/div[3]/div/div/div[1]/div/div[2]/button[1]")));
+        botaoGenrenCurso.click();
+
+        WebElement botaoSlides = driver.findElement(By.xpath("/html/body/div/div[2]/div[1]/div[3]/div/div/div/button[2]"));
+        botaoSlides.click();
+
+        WebElement campoTituloSlide = driver.findElement(By.xpath("/html/body/div/div[2]/div[1]/div[5]/div[1]/div/div[1]/div/div/input"));
+        campoTituloSlide.sendKeys(tituloSlide);
+
+        WebElement campoSlide = driver.findElement(By.xpath("/html/body/div/div[2]/div[1]/div[5]/div[1]/div/div[2]/div/div/input"));
+        campoSlide.sendKeys(slide);
+
+        WebElement campoDescricaoSlide = driver.findElement(By.xpath("/html/body/div/div[2]/div[1]/div[5]/div[1]/div/div[3]/div/div/textarea[1]"));
+        campoDescricaoSlide.sendKeys(descricaoSlide);
+
+        WebElement botaoAdiconarSlide = driver.findElement(By.xpath("/html/body/div/div[2]/div[1]/div[5]/div[1]/div/div[4]/button"));
+        botaoAdiconarSlide.click();
+
+        WebElement mensagem = driver.findElement(By.xpath("/html/body/div[2]/div[3]/div/div[1]/p"));
+        String textoMensagem = mensagem.getText();
+
+        assertEquals("O slide foi adicionado com sucesso!", textoMensagem);
 
         esperarSegundos(5);
     }
@@ -64,8 +101,19 @@ public class CasoDeTeste09 {
     @Test
     public void testSubstituirSlide(){
         driver.get(linkSite);
-
         loginFirebase.login();
+
+        WebElement botaoPerfil = driver.findElement(By.xpath("/html/body/div/section[2]/div[2]/div/div[1]/div/div[2]/button[2]"));
+        botaoPerfil.click();
+
+        WebElement botaoGerenCursos = driver.findElement(By.xpath("/html/body/div[2]/div[3]/ul/li[2]"));
+        botaoGerenCursos.click();
+
+        WebElement botaoGenrenCurso = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div/div/div[3]/div/div/div[1]/div/div[2]/button[1]")));
+        botaoGenrenCurso.click();
+
+        WebElement botaoSlides = driver.findElement(By.xpath("/html/body/div/div[2]/div[1]/div[3]/div/div/div/button[2]"));
+        botaoSlides.click();
 
         esperarSegundos(5);
     }
