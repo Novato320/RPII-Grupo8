@@ -25,8 +25,9 @@ public class CasoDeTeste09 {
     private String linkSite = ConfigHelper.get("site");
 
     private String tituloSlide = "Slide-Teste G.8";
-    private String slide = ConfigHelper.get("slide.guilherme");
-    private String descricaoSlide = "Esse slide foi criado para testes.";
+    private String slide1 = ConfigHelper.get("slide1");
+    private String slide2 = ConfigHelper.get("slide2");
+    private String descricaoSlide = "Esse slide1 foi criado para testes.";
 
     private WebDriver driver;
     private ChromeOptions options;
@@ -58,7 +59,7 @@ public class CasoDeTeste09 {
 
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-        loginFirebase = new LoginFirebase(driver, "key.guilherme", "value.guilherme");
+        loginFirebase = new LoginFirebase(driver);
     }
 
     @Test
@@ -82,7 +83,7 @@ public class CasoDeTeste09 {
         campoTituloSlide.sendKeys(tituloSlide);
 
         WebElement campoSlide = driver.findElement(By.xpath("/html/body/div/div[2]/div[1]/div[5]/div[1]/div/div[2]/div/div/input"));
-        campoSlide.sendKeys(slide);
+        campoSlide.sendKeys(slide1);
 
         WebElement campoDescricaoSlide = driver.findElement(By.xpath("/html/body/div/div[2]/div[1]/div[5]/div[1]/div/div[3]/div/div/textarea[1]"));
         campoDescricaoSlide.sendKeys(descricaoSlide);
@@ -93,7 +94,7 @@ public class CasoDeTeste09 {
         WebElement mensagem = driver.findElement(By.xpath("/html/body/div[2]/div[3]/div/div[1]/p"));
         String textoMensagem = mensagem.getText();
 
-        assertEquals("O slide foi adicionado com sucesso!", textoMensagem);
+        assertEquals("O slide1 foi adicionado com sucesso!", textoMensagem);
 
         esperarSegundos(5);
     }
@@ -115,7 +116,7 @@ public class CasoDeTeste09 {
         WebElement botaoSlides = driver.findElement(By.xpath("/html/body/div/div[2]/div[1]/div[3]/div/div/div/button[2]"));
         botaoSlides.click();
 
-        esperarSegundos(5);
+        esperarSegundos(50);
     }
 
     @After
