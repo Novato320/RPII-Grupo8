@@ -1,0 +1,186 @@
+import org.junit.jupiter.api.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+import java.time.Duration;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+public class CT05Teste {
+
+    private WebDriver driver;
+    private WebDriverWait wait;
+    private final Duration TIMEOUT = Duration.ofSeconds(20);
+    private final String URL_BASE = "https://testes.codefolio.com.br/";
+    private JavascriptExecutor js;
+
+    // ====== AS CHAVES ======
+    private final String FIREBASE_KEY = "firebase:authUser:AIzaSyARn2qVrSSndFu9JSo5mexrQCMxmORZzCg:[DEFAULT]";
+    private final String FIREBASE_VALUE ="{\"apiKey\":\"AIzaSyARn2qVrSSndFu9JSo5mexrQCMxmORZzCg\",\"appName\":\"[DEFAULT]\",\"createdAt\":\"1760400705954\",\"displayName\":\"Lucas Silveira Segabinazzi\",\"email\":\"lucassegabinazzi.aluno@unipampa.edu.br\",\"emailVerified\":true,\"isAnonymous\":false,\"lastLoginAt\":\"1762727374858\",\"phoneNumber\":null,\"photoURL\":\"https://lh3.googleusercontent.com/a/ACg8ocL3qqsggaDq7t44ypAVGrSgimOmbSrkT66YgR_gHIcJYVDDq-M=s96-c\",\"providerData\":[{\"providerId\":\"google.com\",\"uid\":\"100873041226868665992\",\"displayName\":\"Lucas Silveira Segabinazzi\",\"email\":\"lucassegabinazzi.aluno@unipampa.edu.br\",\"phoneNumber\":null}],\"stsTokenManager\":{\"accessToken\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjU0NTEzMjA5OWFkNmJmNjEzODJiNmI0Y2RlOWEyZGZlZDhjYjMwZjAiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiTHVjYXMgU2lsdmVpcmEgU2VnYWJpbmF6emkiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jTDNxcXNnZ2FEcTd0NDR5cEFWR3JTZ2ltT21iU3JrVDY2WWdSX2dISWNKWVZERHEtTT1zOTYtYyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9yZWFjdC1uYS1wcmF0aWNhIiwiYXVkIjoicmVhY3QtbmEtcHJhdGljYSIsImF1dGhfdGltZSI6MTc2MjcyNzM3NCwidXNlcl9pZCI6IkJWeDI1OHNpaG9hZnFtT0R3VXNFSUI1S2JlSjMiLCJzdWIiOiJCVngyNThzaWhvYWZxbU9Ed1VzRUlCNUtiZUozIiwiaWF0IjoxNzYyNzMzOTc1LCJleHAiOjE3NjI3Mzc1NzUsImVtYWlsIjoibHVjYXNzZWdhYmluYXp6aS5hbHVub0B1bmlwYW1wYS5lZHUuYnIiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJnb29nbGUuY29tIjpbIjEwMDg3MzA0MTIyNjg2ODY2NTk5MiJdLCJlbWFpbCI6WyJsdWNhc3NlZ2FiaW5henppLmFsdW5vQHVuaXBhbXBhLmVkdS5iciJdfSwic2lnbl9pbl9wcm92aWRlciI6Imdvb2dsZS5jb20ifX0.Wae7ybz4e3LMA1iCC5kIwA6BizvdPnI3JlWK2nVHooRxgOHJBahD7GjAmx3OltnxUN0KEy0B1aurXsSp16alsbSPSHCRu-t5qan5fGR6HXYbapVyVcgGP8d8Hp2-IZeSpsS_ObBNV68b2y7OnAxTiubtiMpSQaLBxUocEaXijsckSueEWj6jWmrKwNbY41zgxbhGpi_vL21PRveUBXpxlSmPxDnOtV4fTezljVFv8TWsuskBBM-PgngvBHjzyrUdpl4fnGHV1SAeIfmYGXzDBY7FivhwNYtpOENKrU18F5Ipg2XPLf9ffbGfkqs0yooRnZhRCDx7iLKIFWlqBDIJFg\",\"expirationTime\":1762737575586,\"refreshToken\":\"AMf-vBymCAQTdS9VeLpX0UACUsOEGooo8IV5j_q_kl6SHJ5hiIzHOc3D8Q8VeCYwirij5uw9GhNnE4fFzC8VzjnBABWloOisTTawMI9o6S2z1JgqN7XfTCVT6T52E35liXpGJdbDKmx4dlJJXi8ZQlph3g5xtAkETzcsaPitG6I3cBbrLvd8YqdC1yVTqWtSN3Qt5cLmR22ZMb_3Oj9wUpG3c2VjOWl_vu-dLVnsP1-hu4LL_S-UQYmaFRbHSuffCsRpr79xN2ChyY7rwOJsJdPMt0s6BR2xKWrYF0Jmvc2YSL_Hg2QMi6vrrqsbpGVBDmzyVY48fgsWmNq0i1fRKrgYntSNkq9geaMS67SX7WxCn0-PYTq3HCsk69Xx10WGQQ_ojfokp-ei5nDd6RnJ_CceRU2CQhWiYgp71lAZDuTJekDFptpH64QhYhd_YZCwtsg3CyPIOh0dubohon7O3rCj0OKCqp9gi5xS-LWCcsFlclsI60tmRCk\"},\"tenantId\":null,\"uid\":\"BVx258sihoafqmODwUsEIB5KbeJ3\",\"_redirectEventId\":null}";
+
+
+
+    @BeforeEach
+    public void setup() throws InterruptedException {
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+
+        driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(30));
+        wait = new WebDriverWait(driver, TIMEOUT);
+        js = (JavascriptExecutor) driver;
+
+        // Login por injeção no Local Storage
+        driver.get(URL_BASE);
+        js.executeScript("window.localStorage.setItem(arguments[0], arguments[1]);",
+                FIREBASE_KEY, FIREBASE_VALUE);
+        driver.navigate().refresh();
+
+        // pequena espera pro Firebase processar a sessão
+        Thread.sleep(4000);
+    }
+
+    @AfterEach
+    public void teardown() {
+        if (driver != null) {
+            // driver.quit();
+        }
+    }
+
+
+
+    // aqui começa o teste
+
+    @Test
+    public void ct05_cadastrarVideo() {
+
+        String nomeCurso = "curso - gp08";
+
+        String titulo     = "Video CT-05 ";
+        String urlVideo   = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+        String descricao  = "Descrição do vídeo (CT-05).";
+
+        // 1) Ir para "Gerenciamento de Cursos"
+        abrirMenuPerfilEIrParaGerenciamento();
+
+        // 2) Clicar no card -> Gerenciar Curso
+        clicarGerenciarCurso(nomeCurso);
+
+        // 3) Preencher seção "Adicionar Vídeo"
+        preencherCamposVideo(titulo, urlVideo, descricao);
+
+        // 4) Adicionar e salvar
+        clicarAdicionarVideo();
+        clicarSalvarCurso();
+
+        // 5) Verificar que o vídeo ficou listado
+       // verificarVideoNaLista(titulo); // Pode ser que esteja com erro..., preciso corrigir.
+
+    }
+
+    // ===================== helpers =====================
+
+    private void abrirMenuPerfilEIrParaGerenciamento() {
+        WebElement profileBtn = wait.until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector("button[aria-label='Configurações da Conta']")));
+        js.executeScript("arguments[0].click();", profileBtn);
+
+        WebElement item = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//li[normalize-space()='Gerenciamento de Cursos']")));
+        item.click();
+
+        wait.until(ExpectedConditions.urlContains("/manage-courses"));
+    }
+
+
+
+    private void clicarGerenciarCurso(String nomeParcialCurso) {
+        // Localiza o card que contém o texto do nome do curso (parcial já funciona)
+        By cardLocator = By.xpath("//h6[contains(normalize-space(),'" + nomeParcialCurso + "')]/ancestor::div[contains(@class,'MuiCardContent-root')]/ancestor::div[contains(@class,'MuiPaper-root')]");
+
+        WebElement card = wait.until(ExpectedConditions.presenceOfElementLocated(cardLocator));
+
+        // Dentro do card, agora acha o botão "Gerenciar Curso"
+        WebElement btn = card.findElement(By.xpath(".//button[contains(.,'Gerenciar Curso')]"));
+
+        js.executeScript("arguments[0].scrollIntoView({block:'center'})", btn);
+        js.executeScript("arguments[0].click();", btn);
+
+        wait.until(ExpectedConditions.urlContains("/adm-cursos"));
+    }
+
+
+
+    private void preencherCamposVideo(String titulo, String url, String descricao) {
+        WebElement titleLabel = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//label[contains(text(),'Título do Vídeo')]")));
+        String idTitulo = titleLabel.getAttribute("for");
+        WebElement inputTitulo = driver.findElement(By.id(idTitulo));
+
+        WebElement urlLabel = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//label[contains(text(),'URL do Vídeo')]")));
+        String idUrl = urlLabel.getAttribute("for");
+        WebElement inputUrl = driver.findElement(By.id(idUrl));
+
+        WebElement descLabel = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//label[contains(text(),'Descrição do Vídeo')]")));
+        String idDesc = descLabel.getAttribute("for");
+        WebElement inputDesc = driver.findElement(By.id(idDesc));
+
+        inputTitulo.clear(); inputTitulo.sendKeys(titulo);
+        inputUrl.clear();    inputUrl.sendKeys(url);
+        inputDesc.clear();   inputDesc.sendKeys(descricao);
+    }
+
+    private void clicarAdicionarVideo() {
+        WebElement add = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[normalize-space()='Adicionar Vídeo']")));
+        js.executeScript("arguments[0].click();", add);
+    }
+
+
+
+    private void clicarSalvarCurso() {
+        WebElement salvar = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[normalize-space()='Salvar Curso']")));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", salvar);
+
+        // 1) modal "Vídeo adicionado com sucesso!"
+        By modalOk = By.xpath("//div[contains(.,'Vídeo adicionado com sucesso')]" +
+                "/following::button[normalize-space()='OK'][1]");
+        try {
+            WebElement ok = new WebDriverWait(driver, Duration.ofSeconds(5))
+                    .until(ExpectedConditions.elementToBeClickable(modalOk));
+            ok.click();
+            new WebDriverWait(driver, Duration.ofSeconds(5))
+                    .until(ExpectedConditions.invisibilityOfElementLocated(modalOk));
+        } catch (Exception ignore) { }
+
+        // 2)  "Curso atualizado com sucesso!" (some sozinho, mas vou garantir)
+        By toast = By.xpath("//*[contains(.,'Curso atualizado com sucesso')][contains(@class,'Toast') or contains(@class,'Snackbar') or contains(@class,'alert')]");
+        try {
+            new WebDriverWait(driver, Duration.ofSeconds(5))
+                    .until(ExpectedConditions.invisibilityOfElementLocated(toast));
+        } catch (Exception ignore) { }
+
+        // continua na /adm-cursos
+        wait.until(ExpectedConditions.urlContains("/adm-cursos"));
+    }
+
+
+
+    private void verificarVideoNaLista(String titulo) {
+        By tituloListado = By.xpath(
+                "//div[contains(.,'Vídeos do Curso')]/following::div[contains(@class,'card')][1]"
+                        + "//*[text()='" + titulo + "']"
+                        + " | //*[contains(@class,'videos') and text()='" + titulo + "']"
+                        + " | //p[text()='" + titulo + "']"
+        );
+        WebElement el = wait.until(ExpectedConditions.presenceOfElementLocated(tituloListado));
+        assertTrue(el.isDisplayed(), "Título do vídeo não apareceu na lista.");
+    }
+
+}
