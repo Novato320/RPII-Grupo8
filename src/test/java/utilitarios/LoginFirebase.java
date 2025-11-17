@@ -7,23 +7,22 @@ import java.time.Duration;
 
 public class LoginFirebase {
     // Dados para login FIREBASE
-    private final String FIREBASE_KEY = ConfigHelper.get("key.guilherme");
-    private final String FIREBASE_VALUE = ConfigHelper.get("value.guilherme");
-    private String linkSite = ConfigHelper.get("site");
+    private final String FIREBASE_KEY;
+    private final String FIREBASE_VALUE;
 
     private WebDriver driver;
     private JavascriptExecutor js;
 
-    public LoginFirebase(WebDriver driver) {
+    public LoginFirebase(WebDriver driver, String key, String value) {
         this.driver = driver;
         driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(50));
         js = (JavascriptExecutor) driver; // inicializa JS Executor
+        FIREBASE_KEY = ConfigHelper.get(key); // key.guilherme
+        FIREBASE_VALUE = ConfigHelper.get(value); // value.guilherme
     }
 
     // logica do login
     public void login(){
-        driver.get(linkSite);
-
         //injeção de dados
         System.out.println("Injetando dados de autenticação no Local Storage...");
         try{

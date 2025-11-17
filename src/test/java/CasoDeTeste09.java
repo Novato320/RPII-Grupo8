@@ -20,6 +20,7 @@ import java.time.Duration;
  * @author Guilherme Jaques
  */
 public class CasoDeTeste09 {
+    private String linkSite = ConfigHelper.get("site");
     private String slide = ConfigHelper.get("slide.guilherme");
 
     private WebDriver driver;
@@ -48,19 +49,25 @@ public class CasoDeTeste09 {
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20)); // tempo para carregar a pagina
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10)); // tempo para procurar um elemento
 
-        loginFirebase = new LoginFirebase(driver);
+        loginFirebase = new LoginFirebase(driver, "key.guilherme", "value.guilherme");
     }
 
     @Test
     public void testEditarSlide(){
+        driver.get(linkSite);
+
         loginFirebase.login();
 
-        //esperarSegundos(5);
+        esperarSegundos(5);
     }
 
     @Test
     public void testSubstituirSlide(){
+        driver.get(linkSite);
 
+        loginFirebase.login();
+
+        esperarSegundos(5);
     }
 
     @After
